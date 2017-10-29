@@ -36,7 +36,7 @@ RSpec.describe Maze do
       let(:goal)  { [1, 0] }
 
       it 'raises a not rectangular error' do
-        expect(Maze.new(map, start, goal)).to raise_error(/not rectangular/)
+        expect{Maze.new(map, start, goal)}.to raise_error(/not rectangular/)
       end
     end
 
@@ -45,8 +45,8 @@ RSpec.describe Maze do
       let(:start) { [0, 0] }
       let(:goal)  { [0, 0] }
             
-      it 'raises a map smaller than required' do
-        expect(Maze.new(map, start, goal)).to raise_error(/smaller than required/)
+      it 'raises a map smaller than required error' do
+        expect{Maze.new(map, start, goal)}.to raise_error(/smaller than required/)
       end
     end
 
@@ -59,7 +59,7 @@ RSpec.describe Maze do
       let(:goal)  { [1, 1] }
 
       it 'raises a wrong starting point error' do
-        expect(Maze.new(map, start, goal)).to raise_error(/wrong starting/)
+        expect{Maze.new(map, start, goal)}.to raise_error(/wrong starting/)
       end
     end
 
@@ -72,7 +72,7 @@ RSpec.describe Maze do
       let(:goal)  { [1, 1] }
 
       it 'raises a wrong starting point error' do
-        expect(Maze.new(map, start, goal)).to raise_error(/wrong starting/)
+        expect{Maze.new(map, start, goal)}.to raise_error(/wrong starting/)
       end
     end
 
@@ -85,7 +85,7 @@ RSpec.describe Maze do
       let(:goal)  { [2, 3] }
 
       it 'raises a wrong goal point error' do
-        expect(Maze.new(map, start, goal)).to raise_error(/wrong goal/)
+        expect{Maze.new(map, start, goal)}.to raise_error(/wrong goal/)
       end
     end
 
@@ -98,7 +98,7 @@ RSpec.describe Maze do
       let(:goal)  { [0, 1] }
 
       it 'raises a wrong goal point error' do
-        expect(Maze.new(map, start, goal)).to raise_error(/wrong goal/)
+        expect{Maze.new(map, start, goal)}.to raise_error(/wrong goal/)
       end
     end
 
@@ -111,7 +111,7 @@ RSpec.describe Maze do
       let(:goal)  { [0, 0] }
 
       it 'raises a wrong goal point error' do
-        expect(Maze.new(map, start, goal)).to raise_error(/wrong goal/)
+        expect{Maze.new(map, start, goal)}.to raise_error(/wrong goal/)
       end
     end
 
@@ -122,9 +122,9 @@ RSpec.describe Maze do
                   } 
       let(:start) { [0, 0] }
       let(:goal)  { [1, 1] }
-      
+
       it 'raises an invalid characters error' do
-        expect(Maze.new(map, start, goal)).to raise_error(/invalid characters/)
+        expect{Maze.new(map, start, goal)}.to raise_error(/invalid characters/)
       end
     end
   end
