@@ -3,7 +3,7 @@ require_relative '../../a_maze'
 RSpec.describe 'A_maze' do
   it 'finds the way out of a maze' do
     pending 'nothing implemented yet'
-    maze     = MazeLoader.load('maze_file_acceptance_spec')
+    maze     = MazeLoader.load('valid_maze')
     solver   = MazeSolver.new(maze)
     solution = solver.solve
     expect(solution.moves).to be_an_instance_of(Array)

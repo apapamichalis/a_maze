@@ -110,8 +110,8 @@ RSpec.describe Maze do
       let(:start) { [0, 0] }
       let(:goal)  { [0, 0] }
 
-      it 'raises a wrong goal point error' do
-        expect{Maze.new(map, start, goal)}.to raise_error(/wrong goal/)
+      it 'raises a start and goal cannot be the same error' do
+        expect{Maze.new(map, start, goal)}.to raise_error(/cannot be the same/)
       end
     end
 
@@ -125,6 +125,18 @@ RSpec.describe Maze do
 
       it 'raises an invalid characters error' do
         expect{Maze.new(map, start, goal)}.to raise_error(/invalid characters/)
+      end
+    end
+
+    context 'without any validation' do
+      let(:map)   { 
+                    [['S', 'X'],
+                     ['a', 'G']] 
+                  } 
+      let(:start) { [3, 4] }
+      let(:goal)  { [3, 4] }
+      it 'allows the creation of invalid objects' do
+        expect{Maze.new(map, start, goal, false)}.not_to raise_error
       end
     end
   end
