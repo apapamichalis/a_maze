@@ -18,9 +18,9 @@ class MazeLoader
     end
 
     private
-      # Returns the instance of str it can find on a maze_array.
-      # If the maze_array has multiple starting or goal points, it will raise an error
-      # If the maze_array has no starting or no goal point, it will raise an error
+      # Returns the location of str (starting or goal point) it finds on a maze_array.
+      # If the maze_array has multiple starting or goal points, it will raise an error.
+      # If the maze_array has no starting or no goal point, it will raise an error.
       def locate(maze_array, str)
         result = nil
         maze_array.each_with_index do |line, r|

@@ -1,4 +1,4 @@
-require_relative '../../lib/maze'
+require_relative '../../lib/a_maze'
 
 RSpec.describe Maze do 
   describe 'when creating a valid maze object' do
@@ -13,7 +13,7 @@ RSpec.describe Maze do
       before(:each) { @maze = Maze.new(map, start, goal) }
       
       it 'has the correct maze map' do
-        expect(@maze.map).to eq(map)
+        expect(@maze.maze_array).to eq(map)
       end
 
       it 'has the correct starting point' do

@@ -1,5 +1,4 @@
-require_relative '../../a_maze'
-
+require_relative '../../lib/a_maze'
 
 RSpec.describe MazeLoader do 
   describe 'when trying to load an existing maze file' do
@@ -7,7 +6,7 @@ RSpec.describe MazeLoader do
       before(:each) { @maze = MazeLoader.load('valid_maze') }
       
       it 'has the map of the maze as an array' do
-        expect(@maze.map).to be_an(Array)
+        expect(@maze.maze_array).to be_an(Array)
 
       end
 
