@@ -1,4 +1,6 @@
 class MazeLoader
-  def initialize(filename)
+  class << self
+    def load(filename)
+    end
   end
 end
