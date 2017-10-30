@@ -29,10 +29,13 @@ class MazeSolver
         # If you still have available moves
         if available_moves(current_position)
           # If there exists a block that has not been visited yet, next to current_position
-          if undiscovered_point(current_position)
+          if !!undiscovered_point(current_position)
+            # Push the current position to the path followed
             @solution.push(current_position)
+            # Mark this position as visited
             @maze.maze_array[current_position[0]][current_position[1]] = current_step
             current_step += 1
+            # Move to the next undiscovered position
             current_position = undiscovered_point(current_position)
           # If all surrounding blocks have already been visited
           else
@@ -58,50 +61,67 @@ class MazeSolver
     # Returns true if Goal is either above, below, to the left or to the right of 
     # the current position, but not diagonally
     def see_goal(current_position)
-      cur_r = current_position[0]
-      cur_c = current_position[1]
-      return true if ((cur_r - @maze.goal[0]).abs == 1) && (cur_c == @maze.goal[1])
-      return true if ((cur_c - @maze.goal[1]).abs == 1) && (cur_r == @maze.goal[0])        
+      row = current_position[0]
+      col = current_position[1]
+      return true if ((row - @maze.goal[0]).abs == 1) && (col == @maze.goal[1])
+      return true if ((col - @maze.goal[1]).abs == 1) && (row == @maze.goal[0])        
       return false
     end
 
-    # Returns true unless the way in every direction is blocked by a wall
+    # Returns true unless the way in every direction is blocked by a wall or the outter bounds of the maze
     def available_moves(current_position)
-      cur_r = current_position[0]
-      cur_c = current_position[1]
-      return true unless @maze.maze_array[cur_r + 1][cur_c] == 'X' || outside_limits([cur_r + 1, cur_c])
-      return true unless @maze.maze_array[cur_r - 1][cur_c] == 'X' || outside_limits([cur_r - 1, cur_c])
-      return true unless @maze.maze_array[cur_r][cur_c + 1] == 'X' || outside_limits([cur_r, cur_c + 1])
-      return true unless @maze.maze_array[cur_r][cur_c - 1] == 'X' || outside_limits([cur_r, cur_c - 1])
+      row = current_position[0]
+      col = current_position[1]
+      return true unless invalid_move?(row + 1, col)
+      return true unless invalid_move?(row - 1, col)
+      return true unless invalid_move?(row, col + 1)
+      return true unless invalid_move?(row, col - 1)
+      return false
+    end
+
+    # Returns true if stepping on those coordinates is an invalid move
+    def invalid_move?(row, col)
+      return is_a_wall?(row, col) || outside_limits?(row, col)
+    end
+
+    # Returns true if a point is a wall
+    def is_a_wall?(row, col)
+      return true if @maze.maze_array[row][col] == 'X'
+      return false
+    end
+
+    # Check if a point is outside the maze array
+    def outside_limits?(row, col)
+      outside = false
+      outside = true if row > @maze.maze_array.length - 1    || row < 0
+      outside = true if col > @maze.maze_array[0].length - 1 || col < 0
+      return outside
+    end
+
+    # Return true if a point is undiscovered
+    def empty_point?(row, col)
+      return true if @maze.maze_array[row][col] == '_'
       return false
     end
 
     # Returns the coordinates of the next undiscovered point if it exists
     def undiscovered_point(current_position)
-      cur_r = current_position[0]
-      cur_c = current_position[1]
-      return [cur_r + 1, cur_c] if @maze.maze_array[cur_r + 1][cur_c] == '_' && !outside_limits([cur_r + 1, cur_c])
-      return [cur_r - 1, cur_c] if @maze.maze_array[cur_r - 1][cur_c] == '_' && !outside_limits([cur_r - 1, cur_c])
-      return [cur_r, cur_c + 1] if @maze.maze_array[cur_r][cur_c + 1] == '_' && !outside_limits([cur_r, cur_c + 1])
-      return [cur_r, cur_c - 1] if @maze.maze_array[cur_r][cur_c - 1] == '_' && !outside_limits([cur_r, cur_c - 1])
+      row = current_position[0]
+      col = current_position[1]
+      return [row + 1, col] if empty_point?(row + 1, col) && !outside_limits?(row + 1, col)
+      return [row - 1, col] if empty_point?(row - 1, col) && !outside_limits?(row - 1, col)
+      return [row, col + 1] if empty_point?(row, col + 1) && !outside_limits?(row, col + 1)
+      return [row, col - 1] if empty_point?(row, col - 1) && !outside_limits?(row, col - 1)
       return false
-    end
-
-    # Check if a point is outside the maze array
-    def outside_limits(point)
-      outside = false
-      outside = true if point[0] > @maze.maze_array.length - 1    || point[0] < 0
-      outside = true if point[1] > @maze.maze_array[0].length - 1 || point[1] < 0
-      return outside
     end
 
     # Returns the previous block we were at.
     def move_backwards(current_position, current_step)
-      cur_r = current_position[0]
-      cur_c = current_position[1]
-      return [cur_r + 1, cur_c] if @maze.maze_array[cur_r + 1][cur_c] == current_step - 1
-      return [cur_r - 1, cur_c] if @maze.maze_array[cur_r - 1][cur_c] == current_step - 1
-      return [cur_r, cur_c + 1] if @maze.maze_array[cur_r][cur_c + 1] == current_step - 1
-      return [cur_r, cur_c - 1] if @maze.maze_array[cur_r][cur_c - 1] == current_step - 1
+      row = current_position[0]
+      col = current_position[1]
+      return [row + 1, col] if @maze.maze_array[row + 1][col] == current_step - 1
+      return [row - 1, col] if @maze.maze_array[row - 1][col] == current_step - 1
+      return [row, col + 1] if @maze.maze_array[row][col + 1] == current_step - 1
+      return [row, col - 1] if @maze.maze_array[row][col - 1] == current_step - 1
     end
 end
