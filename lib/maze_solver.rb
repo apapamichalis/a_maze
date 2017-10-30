@@ -1,6 +1,9 @@
 class MazeSolver
   def initialize(maze)
-    @maze = maze
+    # Duplicating the maze, because our algorithm mutates it
+    # It is memory-inefficient, but allows us to use the same maze object
+    # with different algorithms if needed.
+    @maze = Marshal.load(Marshal.dump(maze))
     @solution = Solution.new
   end
 
