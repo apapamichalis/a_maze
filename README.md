@@ -48,7 +48,8 @@ ___
       optional argument (fourth or second, respectively). Default is ```true```* Eg ```maze = MazeLoader.load('valid_maze_filename', false)``` will skip 
       validations and allow anything to be constructed as a Maze Object. User must be **extremely** sure the data provided comply with the maze definition specs.
 
-3. Create an instance of MazeSolver ```class: solver = MazeSolver.new(maze)```. The maze solver will duplicate the maze it is given, so that it will not mutate it
+3. Create an instance of MazeSolver ```solver = MazeSolver.new(maze)```. The maze solver will duplicate the maze it is given, so that it will not mutate it.
+ It can also support more algorithms (if their class definitions are present) with ```solver = MazeSolver.new(maze, 'algorithm name')```. A conditional must be added inside MazeSolver.new method for each one.
 
 4. Find the path (if it exists): ```solution = solver.solve```
 
