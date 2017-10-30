@@ -56,7 +56,7 @@ class MazeSolver
     end
 
     # Returns true if Goal is either above, below, to the left or to the right of 
-    # the current position, but not diagonally, hence the XOR
+    # the current position, but not diagonally
     def see_goal(current_position)
       cur_r = current_position[0]
       cur_c = current_position[1]
