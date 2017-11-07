@@ -8,10 +8,10 @@ RSpec.describe Maze do
                 } 
     let(:start) { [0, 0] }
     let(:goal)  { [1, 1] }
-               
+
     context 'it returns a valid maze object which' do
-      before(:each) { @maze = Maze.new(map, start, goal) }
-      
+      before(:each) { @maze = Maze.new(map) }
+
       it 'has the correct maze map' do
         expect(@maze.maze_array).to eq(map)
       end
@@ -23,6 +23,21 @@ RSpec.describe Maze do
       it 'has the correct goal point' do
         expect(@maze.goal).to eq(goal)
       end
+
+      it 'has an immutable array' do
+        maze_ar = @maze.maze_array
+        expect { maze_ar[0][0] = 'A' }.to raise_error(/frozen Array/)
+      end
+
+      it 'has an immutable starting point' do
+        start = @maze.start
+        expect { start[0] = 12 }.to raise_error(/frozen/)
+      end
+
+      it 'has an immutable goal point' do
+        goal = @maze.goal
+        expect { goal[0] = 12 }.to raise_error(/frozen/)
+      end
     end
   end
 
@@ -30,113 +45,68 @@ RSpec.describe Maze do
     context 'which has a non-rectangular maze' do
       let(:map)   { 
                     [['S','X'],
-                     ['G'    ]] 
-                  } 
+                     ['G'    ]]
+                  }
       let(:start) { [0, 0] }
       let(:goal)  { [1, 0] }
 
       it 'raises a not rectangular error' do
-        expect{Maze.new(map, start, goal)}.to raise_error(/not rectangular/)
-      end
-    end
-
-    context 'which has a map smaller than 2 blocks' do
-      let(:map)   { ['S']  } 
-      let(:start) { [0, 0] }
-      let(:goal)  { [0, 0] }
-            
-      it 'raises a map smaller than required error' do
-        expect{Maze.new(map, start, goal)}.to raise_error(/smaller than required/)
-      end
-    end
-
-    context 'which has a starting point outside map' do
-      let(:map)   { 
-                    [['_', 'X'],
-                     ['_', 'G']] 
-                  } 
-      let(:start) { [2, 3] }
-      let(:goal)  { [1, 1] }
-
-      it 'raises a wrong starting point error' do
-        expect{Maze.new(map, start, goal)}.to raise_error(/wrong starting/)
-      end
-    end
-
-    context 'which has a starting point on a wall' do
-      let(:map)   { 
-                    [['_', 'X'],
-                     ['_', 'G']] 
-                  } 
-      let(:start) { [0, 1] }
-      let(:goal)  { [1, 1] }
-
-      it 'raises a wrong starting point error' do
-        expect{Maze.new(map, start, goal)}.to raise_error(/wrong starting/)
-      end
-    end
-
-    context 'which has a goal point outside map' do
-      let(:map)   { 
-                    [['S', 'X'],
-                     ['_', '_']] 
-                  } 
-      let(:start) { [0, 0] }
-      let(:goal)  { [2, 3] }
-
-      it 'raises a wrong goal point error' do
-        expect{Maze.new(map, start, goal)}.to raise_error(/wrong goal/)
-      end
-    end
-
-    context 'which has a goal point on a wall' do
-      let(:map)   { 
-                    [['S', 'X'],
-                     ['_', '_']] 
-                  } 
-      let(:start) { [0, 0] }
-      let(:goal)  { [0, 1] }
-
-      it 'raises a wrong goal point error' do
-        expect{Maze.new(map, start, goal)}.to raise_error(/wrong goal/)
-      end
-    end
-
-    context 'which has the same point as start and goal' do
-      let(:map)   { 
-                    [['_', 'X'],
-                     ['_', '_']] 
-                  } 
-      let(:start) { [0, 0] }
-      let(:goal)  { [0, 0] }
-
-      it 'raises a start and goal cannot be the same error' do
-        expect{Maze.new(map, start, goal)}.to raise_error(/cannot be the same/)
+        expect{ Maze.new(map) }.to raise_error(/not rectangular/)
       end
     end
 
     context 'which includes invalid characters' do
-      let(:map)   { 
+      let(:map)   {
                     [['S', 'X'],
-                     ['a', 'G']] 
-                  } 
+                     ['a', 'G']]
+                  }
       let(:start) { [0, 0] }
       let(:goal)  { [1, 1] }
 
       it 'raises an invalid characters error' do
-        expect{Maze.new(map, start, goal)}.to raise_error(/invalid characters/)
+        expect{ Maze.new(map) }.to raise_error(/invalid characters/)
       end
     end
 
-    context 'without any validation' do
-      let(:map)   { 
-                    [['S', 'X'],
-                     ['a', 'G']] 
-                  } 
-      let(:start) { [3, 4] }
-      let(:goal)  { [3, 4] }
-      it 'allows the creation of invalid objects' do
-        expect{Maze.new(map, start, goal, false)}.not_to raise_error
+    context 'when the maze does not have a starting point' do
+      let(:map)   {
+        [['X', 'X'],
+         ['_', 'G']]
+      }
+
+      it 'raises a starting point not found error' do
+        expect { Maze.new(map) }.to raise_error(/not locate S/)
+      end
+    end
+
+    context 'when the maze does not have a goal point' do
+      let(:map)   {
+        [['S', 'X'],
+         ['X', '_']]
+      }
+
+      it 'raises a goal point not found error' do
+        expect { Maze.new(map) }.to raise_error(/not locate G/)
+      end
+    end
+
+    context 'when the maze has more than one starting points' do
+      let(:map)   {
+        [['S', 'S'],
+         ['_', 'G']]
+      }
+      it 'raises a multiple starting points error' do
+        expect{ Maze.new(map) }.to raise_error(/multiple S/)
+      end
+    end
+
+    context 'when the maze has more than one goal points' do
+      let(:map)   {
+        [['S', 'X'],
+         ['G', 'G']]
+      }
+      it 'raises a multiple goal points error' do
+        expect{ Maze.new(map) }.to raise_error(/multiple G/)
       end
     end
   end

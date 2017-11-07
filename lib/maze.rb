@@ -1,3 +1,4 @@
+require 'ice_nine'
 # Holds the definition of a valid Maze object
 #
 # A valid maze object consists of a two-dimensional array (the maze),
@@ -7,28 +8,42 @@ class Maze
   attr_reader :start
   attr_reader :goal
 
-  # Maze validation can be turned off, as it slows down loading considerably.
-  def initialize(maze_array, start, goal, validations = true)
-    @maze_array = maze_array 
-    @start      = start
-    @goal       = goal
-    validate_maze if validations
+  def initialize(maze_array)
+    @maze_array = IceNine.deep_freeze(maze_array)
+    start      = locate(@maze_array, 'S')
+    goal       = locate(@maze_array, 'G')
+    validate_maze
+    @start = IceNine.deep_freeze(start)
+    @goal  = IceNine.deep_freeze(goal)
   end
 
   private
 
+    # Returns the location of str (starting or goal point) it finds on a maze_array.
+    # If the maze_array has multiple starting or goal points, it will raise an error.
+    # If the maze_array has no starting or no goal point, it will raise an error.
+    def locate(maze_array, str)
+      result = nil
+      maze_array.each_with_index do |line, r|
+        line.each_with_index do |char, c|
+          if char == str
+            raise "Expected 1. Found multiple #{str}" unless result.nil?
+            result = [r, c]
+          end
+        end
+      end
+      raise "Could not locate #{str} on maze file given." if result.nil?
+      result
+    end
+
     def validate_maze
-      validate_length
-      validate_characters
       validate_dimensions
-      validate_start
-      validate_goal
-      validate_dif_start_goal
+      validate_characters
     end
 
     # Only valid characters allowed S, G, _, X
     def validate_characters
-      @maze_array.each do |row| 
+      @maze_array.each do |row|
         row.each { |c| raise 'Maze includes invalid characters' if c =~ /[^SG_X]/ }
       end
     end
@@ -37,31 +52,5 @@ class Maze
     def validate_dimensions
       l = @maze_array[0].length
       @maze_array.each { |row| raise 'Maze is not rectangular' if row.length != l }
-    end
-
-    # Maze has minimum 2 blocks
-    def validate_length
-      raise "Maze is smaller than required" if @maze_array.flatten.length < 2
-    end
-
-    # Starting point cannot be outside maze map or on a wall
-    def validate_start
-      r, c = @start
-      if r < 0 || c < 0 || r > @maze_array.length-1 || c > @maze_array[0].length-1 || @maze_array[r][c] == 'X'
-        raise 'Definition includes wrong starting point'  
-      end
-    end
-
-    # Goal point cannot be outside maze map or on a wall
-    def validate_goal
-      r, c = @goal
-      if r < 0 || c < 0 || r > @maze_array.length-1 || c > @maze_array[0].length-1 || @maze_array[r][c] == 'X'
-        raise 'Definition includes wrong goal point'  
-      end
-    end
-
-    # Starting and goal points cannot be the same
-    def validate_dif_start_goal
-      raise 'Start and goal cannot be the same' if @start == @goal
     end
 end

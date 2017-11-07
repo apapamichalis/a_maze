@@ -3,7 +3,7 @@ require_relative '../../lib/a_maze'
 RSpec.describe 'A_maze' do
   before(:each) do
     @maze     = MazeLoader.load('valid_maze')
-    @solver   = MazeSolver.new(@maze)
+    @solver   = MazeSolver.build(@maze)
     @solution = @solver.solve
   end
 
