@@ -1,3 +1,5 @@
+# This is the class used to create a new maze solving object
+# Currently only one algorithm is supported, but can support more when needed.
 class MazeSolver
   # This is the way we can use more than one solving algorithms, by adding
   # it's class definition and an extra conditional below

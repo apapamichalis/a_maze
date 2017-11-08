@@ -1,3 +1,4 @@
+# ice_nine is a gem, with which one deep freezes recursively ruby objects.
 require 'ice_nine'
 # Holds the definition of a valid Maze object
 #
