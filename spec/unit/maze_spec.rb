@@ -2,10 +2,10 @@ require_relative '../../lib/a_maze'
 
 RSpec.describe Maze do 
   describe 'when creating a valid maze object' do
-    let(:map)   { 
+    let(:map)   {
                   [['S', 'X'],
-                   ['_', 'G']] 
-                } 
+                   ['_', 'G']]
+                }
     let(:start) { [0, 0] }
     let(:goal)  { [1, 1] }
 
@@ -37,6 +37,16 @@ RSpec.describe Maze do
       it 'has an immutable goal point' do
         goal = @maze.goal
         expect(goal).to be_frozen
+      end
+
+      it 'can only be 2 blocks high' do
+        map = [['S'], ['G']]
+        expect(Maze.new(map)).not_to be_nil
+      end
+
+      it 'can only be 2 blocks wide' do
+        map = ['S', 'G']
+        expect(Maze.new(map)).not_to be_nil
       end
     end
   end

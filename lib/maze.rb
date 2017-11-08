@@ -20,38 +20,41 @@ class Maze
 
   private
 
-    # Returns the location of str (starting or goal point) it finds on a maze_array.
-    # If the maze_array has multiple starting or goal points, it will raise an error.
-    # If the maze_array has no starting or no goal point, it will raise an error.
-    def locate(maze_array, str)
-      result = nil
-      maze_array.each_with_index do |line, r|
-        line.each_with_index do |char, c|
-          if char == str
-            raise "Expected 1. Found multiple #{str}" unless result.nil?
-            result = [r, c]
-          end
+  # Returns the location of str (starting or goal point) it finds on a maze_array.
+  # If the maze_array has multiple starting or goal points, it will raise an error.
+  # If the maze_array has no starting or no goal point, it will raise an error.
+  def locate(maze_array, str)
+    result = nil
+    maze_array = [] << maze_array unless maze_array[0].instance_of? Array
+    maze_array.each_with_index do |line, r|
+      line.each_with_index do |char, c|
+        if char == str
+          raise "Expected 1. Found multiple #{str}" unless result.nil?
+          result = [r, c]
         end
       end
-      raise "Could not locate #{str} on maze file given." if result.nil?
-      result
     end
+    raise "Could not locate #{str} on maze file given." if result.nil?
+    result
+  end
 
-    def validate_maze
-      validate_dimensions
-      validate_characters
-    end
+  def validate_maze
+    validate_dimensions
+    validate_characters
+  end
 
-    # Only valid characters allowed S, G, _, X
-    def validate_characters
-      @maze_array.each do |row|
-        row.each { |c| raise 'Maze includes invalid characters' if c =~ /[^SG_X]/ }
-      end
+  # Only valid characters allowed S, G, _, X
+  def validate_characters
+    map = @maze_array
+    map = [] << @maze_array unless @maze_array[0].instance_of? Array
+    map.each do |row|
+      row.each { |c| raise 'Maze includes invalid characters' if c =~ /[^SG_X]/ }
     end
+  end
 
-    # All rows must have equal length
-    def validate_dimensions
-      l = @maze_array[0].length
-      @maze_array.each { |row| raise 'Maze is not rectangular' if row.length != l }
-    end
+  # All rows must have equal length
+  def validate_dimensions
+    l = @maze_array[0].length
+    @maze_array.each { |row| raise 'Maze is not rectangular' if row.length != l }
+  end
 end
