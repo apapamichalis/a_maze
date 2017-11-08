@@ -10,11 +10,11 @@ class Maze
 
   def initialize(maze_array)
     @maze_array = IceNine.deep_freeze(maze_array)
-    start      = locate(@maze_array, 'S')
-    goal       = locate(@maze_array, 'G')
+    start       = locate(@maze_array, 'S')
+    goal        = locate(@maze_array, 'G')
     validate_maze
-    @start = IceNine.deep_freeze(start)
-    @goal  = IceNine.deep_freeze(goal)
+    @start      = IceNine.deep_freeze(start)
+    @goal       = IceNine.deep_freeze(goal)
   end
 
   private

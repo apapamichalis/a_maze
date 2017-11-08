@@ -42,13 +42,9 @@ ___
 
    a. Create the maze and set it's starting points be creating a new instance of the Maze class: ```maze = Maze.new([['S', 'X'], ['_', 'G']], [0, 0], [1, 1])```
 
-   b. Load the maze directly from a file in mazes directory: ```maze = MazeLoader.load('valid_maze_filename')```
-      
-      *In both of the above cases, for extremely large maze files, the user has the option to skip the validations of the maze object, by passing a ```false``` 
-      optional argument (fourth or second, respectively). Default is ```true```* Eg ```maze = MazeLoader.load('valid_maze_filename', false)``` will skip 
-      validations and allow anything to be constructed as a Maze Object. User must be **extremely** sure the data provided comply with the maze definition specs.
+   b. Load the maze directly from a file in mazes directory: ```maze = MazeLoader.load('valid_maze_filename')``` . The object created has an deep frozen map array and start and goal points.
 
-3. Create an instance of MazeSolver ```solver = MazeSolver.new(maze)```. The maze solver will duplicate the maze it is given, so that it will not mutate it.
+3. Create an instance of MazeSolver ```solver = MazeSolver.build(maze)```. The maze solver will duplicate the maze it is given, because it needs a mutable map.
  It can also support more algorithms (if their class definitions are present) with ```solver = MazeSolver.new(maze, 'algorithm name')```. A conditional must be added inside MazeSolver.new method for each one.
 
 4. Find the path (if it exists): ```solution = solver.solve```

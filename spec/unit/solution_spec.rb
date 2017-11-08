@@ -25,15 +25,24 @@ RSpec.describe Solution do
       @solution.push([0, 0])
       @solution.pop
     end
-    
+
     it 'removes it' do
       expect(@solution.path).to eq([])
     end
 
     it 'counts the total number of steps taken (forwards and backwards' do
       expect(@solution.total_steps).to eq(2)
+    end
+
+    it 'does not keeping counting when the path is empty and popping' do
       @solution.pop
-      expect(@solution.total_steps).to eq(3)
+      expect(@solution.total_steps).to eq(2)
+    end
+
+    it 'returns the coordinates of the previous block' do
+      @solution.push([3, 5])
+      previous = @solution.pop
+      expect(previous).to eq([3, 5])
     end
   end
 

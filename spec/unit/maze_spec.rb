@@ -26,17 +26,17 @@ RSpec.describe Maze do
 
       it 'has an immutable array' do
         maze_ar = @maze.maze_array
-        expect { maze_ar[0][0] = 'A' }.to raise_error(/frozen Array/)
+        expect(maze_ar).to be_frozen
       end
 
       it 'has an immutable starting point' do
         start = @maze.start
-        expect { start[0] = 12 }.to raise_error(/frozen/)
+        expect(start).to be_frozen
       end
 
       it 'has an immutable goal point' do
         goal = @maze.goal
-        expect { goal[0] = 12 }.to raise_error(/frozen/)
+        expect(goal).to be_frozen
       end
     end
   end

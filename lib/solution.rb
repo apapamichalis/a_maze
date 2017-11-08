@@ -2,7 +2,6 @@
 # Every forward step is a push every backward step is a pop
 # If the maze is unsolvable the path array is flushed
 # The total_steps keeps track of the steps taken, when trying to solve this maze
-
 class Solution
   attr_reader :path
   attr_reader :total_steps
@@ -18,11 +17,12 @@ class Solution
   end
 
   def pop
-    @path.pop
+    return if @path.empty?
     @total_steps += 1
+    @path.pop
   end
 
   def flush
     @path = []
-  end 
+  end
 end
