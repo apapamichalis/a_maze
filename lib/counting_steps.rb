@@ -113,11 +113,6 @@ class CountingSteps
   # Duplicating in this way, because of original array being deep frozen and we need
   # a mutable maze map
   def duplicate_maze(m)
-    maze_array = []
-    (0...m.maze_array.length).each { |row| maze_array[row] = Array.new(m.maze_array[0].length) }
-    (0...m.maze_array.length).each do |row|
-      (0...m.maze_array[0].length).each { |col| maze_array[row][col] = m.maze_array[row][col] }
-    end
-    maze_array
+    m.maze_array.each.each.map(&:dup)
   end
 end
